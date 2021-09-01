@@ -5,7 +5,7 @@ const db = require('../database/db');
 
 
 exports.list = (req, res) => {
-	const sql = "SELECT * FROM `departments`";
+	const sql = "SELECT * FROM `students`";
 
 	db.query(sql, (error, rows, fields) => {
 		if( error ){
@@ -24,7 +24,7 @@ exports.single = (req, res) => {
 		}, res);
 	}
 
-	const sql = "SELECT * FROM `departments` WHERE `id` = " + req.params.id;
+	const sql = "SELECT * FROM `students` WHERE `id` = " + req.params.id;
 
 	db.query(sql, (error, rows, fields) => {
 		if( error ){
@@ -41,15 +41,22 @@ exports.single = (req, res) => {
 
 
 exports.add = (req, res) => {
-	const data = [req.body.name, req.body.abbr, req.body.founded]
+	const data = [
+		req.body.group_id, 
+		req.body.name, 
+		req.body.last_name, 
+		req.body.surname,
+		req.body.birthdate
+	]
 	if( !data.every( field => field) ){
 		return response.send(400, {
 			'message': 'Required fields cannot be empty'
 		}, res);
 	}
 
-	const sql = "INSERT INTO `departments` (`id`, `name`, `abbr`, `founded`, `logo`, `created_at`) VALUES (NULL, '"
-		+ req.body.name+"', '"+req.body.abbr+"', '"+req.body.founded+"', NULL, CURRENT_TIMESTAMP)"
+	const sql = "INSERT INTO `students` (`id`, `group_id`, `name`, `last_name`, `surname`, `birthdate`, `email`) VALUES (NULL, "
+		+ req.body.group_id+", '"+req.body.name+"', '"+req.body.last_name+"', '" 
+		+ req.body.surname+"', '"+ req.body.birthdate+"', '"+req.body.email+"')"
 
 	db.query(sql, (error, rows, fields) => {
 		if( error ){
@@ -68,15 +75,23 @@ exports.update = (req, res) => {
 		}, res);
 	}
 
-	const data = [req.body.name, req.body.abbr, req.body.founded]
+	const data = [
+		req.body.group_id, 
+		req.body.name, 
+		req.body.last_name, 
+		req.body.surname,
+		req.body.birthdate
+	]
 	if( !data.every( field => field) ){
 		return response.send(400, {
 			'message': 'Required fields cannot be empty'
 		}, res);
 	}
 
-	const sql = "UPDATE `departments` SET `name` = '"+req.body.name+"', `abbr` = '"+req.body.abbr
-		+ "', `founded` = '"+req.body.founded+"' WHERE `departments`.`id` = "+req.params.id;
+	const sql = "UPDATE `students` SET `group_id` = "+req.body.group_id+", `name` = '" 
+		+ req.body.name+"', `last_name` = '"+req.body.last_name+"', `surname` = '"
+		+ req.body.surname+"', `birthdate` = '"+req.body.birthdate+"', `email` = '" 
+		+ req.body.email+"' WHERE `students`.`id` = "+req.params.id;
 
 	db.query(sql, (error, rows, fields) => {
 		if( error ){
@@ -95,7 +110,7 @@ exports.delete = (req, res) => {
 		}, res);
 	}
 
-	const sql = "DELETE FROM `departments` WHERE `departments`.`id` = "+req.params.id;
+	const sql = "DELETE FROM `students` WHERE `students`.`id` = "+req.params.id;
 
 	db.query(sql, (error, rows, fields) => {
 		if( error ){

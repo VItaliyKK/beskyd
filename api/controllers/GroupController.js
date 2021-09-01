@@ -5,7 +5,7 @@ const db = require('../database/db');
 
 
 exports.list = (req, res) => {
-	const sql = "SELECT * FROM `departments`";
+	const sql = "SELECT * FROM `groups`";
 
 	db.query(sql, (error, rows, fields) => {
 		if( error ){
@@ -24,7 +24,7 @@ exports.single = (req, res) => {
 		}, res);
 	}
 
-	const sql = "SELECT * FROM `departments` WHERE `id` = " + req.params.id;
+	const sql = "SELECT * FROM `groups` WHERE `id` = " + req.params.id;
 
 	db.query(sql, (error, rows, fields) => {
 		if( error ){
@@ -41,15 +41,21 @@ exports.single = (req, res) => {
 
 
 exports.add = (req, res) => {
-	const data = [req.body.name, req.body.abbr, req.body.founded]
+	const data = [
+		req.body.abbr, 
+		req.body.form_education, 
+		req.body.department_id, 
+		req.body.max_quantity_members
+	]
 	if( !data.every( field => field) ){
 		return response.send(400, {
 			'message': 'Required fields cannot be empty'
 		}, res);
 	}
 
-	const sql = "INSERT INTO `departments` (`id`, `name`, `abbr`, `founded`, `logo`, `created_at`) VALUES (NULL, '"
-		+ req.body.name+"', '"+req.body.abbr+"', '"+req.body.founded+"', NULL, CURRENT_TIMESTAMP)"
+	const sql = "INSERT INTO `groups` (`id`, `abbr`, `form_education`, `department_id`, `max_quantity_members`) VALUES (NULL, '"
+		+ req.body.abbr+"', '"+req.body.form_education+"', "
+		+ req.body.department_id+", "+req.body.max_quantity_members+")";
 
 	db.query(sql, (error, rows, fields) => {
 		if( error ){
@@ -68,15 +74,21 @@ exports.update = (req, res) => {
 		}, res);
 	}
 
-	const data = [req.body.name, req.body.abbr, req.body.founded]
+	const data = [
+		req.body.abbr, 
+		req.body.form_education, 
+		req.body.department_id, 
+		req.body.max_quantity_members
+	]
 	if( !data.every( field => field) ){
 		return response.send(400, {
 			'message': 'Required fields cannot be empty'
 		}, res);
 	}
 
-	const sql = "UPDATE `departments` SET `name` = '"+req.body.name+"', `abbr` = '"+req.body.abbr
-		+ "', `founded` = '"+req.body.founded+"' WHERE `departments`.`id` = "+req.params.id;
+	const sql = "UPDATE `groups` SET `abbr` = '"+req.body.abbr+"', `form_education` = '"+req.body.form_education 
+		+ "', `department_id` = "+req.body.department_id+", `max_quantity_members` = "+req.body.max_quantity_members
+		+ " WHERE `groups`.`id` = "+req.params.id;
 
 	db.query(sql, (error, rows, fields) => {
 		if( error ){
@@ -95,7 +107,7 @@ exports.delete = (req, res) => {
 		}, res);
 	}
 
-	const sql = "DELETE FROM `departments` WHERE `departments`.`id` = "+req.params.id;
+	const sql = "DELETE FROM `groups` WHERE `groups`.`id` = "+req.params.id;
 
 	db.query(sql, (error, rows, fields) => {
 		if( error ){

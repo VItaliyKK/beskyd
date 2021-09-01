@@ -1,20 +1,19 @@
-require('dotenv').config()
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
 
-const express = require('express')
-const app = express()
-const bodyParser = require('body-parser')
+// ↓ implement custom environment variables
+require('dotenv').config();
 
-const port = process.env.PORT || 3500
+const port = process.env.PORT || 3500;
 
-
+// ↓ implement 'bodyParser' for parsing body of request
 app.use(bodyParser.urlencoded({
 	extended:true
-}))
-app.use(bodyParser.json())
+}));
+app.use(bodyParser.json());
 
-const routes = require('./routes/routes')
-routes(app)
+const routes = require('./routes/routes');
+routes(app);
 
-app.listen(port, () => {
-    console.log(`App listen on port ${port}`);
-})
+app.listen(port, () => console.log(`App listen on port ${port}`))
