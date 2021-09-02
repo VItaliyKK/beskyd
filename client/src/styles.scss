@@ -2,3 +2,30 @@
 @import './app/shared/styles/variables';
 @import './app/shared/styles/reset';
 @import './app/shared/styles/static';
+
+html {
+    scroll-behavior: smooth;
+}
+
+body{
+	min-height: 100vh;
+    overflow-x: hidden; 
+}
+
+.limit{
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+@media screen and (max-width: 1200px) {
+    .limit{
+        width: calc(100% - 30px);
+    }
+};
+
+@media screen and (max-width: 500px) {
+    .limit{
+        width: calc(100% - 20px);
+    }
+};

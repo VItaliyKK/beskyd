@@ -5,6 +5,14 @@
 .border-radius{
 	border-radius: 6px;
 }
+/*------------ transition ------------*/
+.transition{
+    transition: all 0.5s ease-in;
+}
+/*------------ hover ------------*/
+.hover:hover{
+    background-color: var(--soft-light-color);
+}
 /*------------ margin ------------*/
 .mt20{
     margin-top: 20px;

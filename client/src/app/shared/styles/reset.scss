@@ -8,8 +8,10 @@ a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, bo
 }
 a{
     text-decoration: none;
+    color: #000;
     &:hover{
         text-decoration: none;
+        color: #000;
     }
 }
 ul, ol{
