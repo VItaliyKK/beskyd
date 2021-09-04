@@ -1,0 +1,9 @@
+.department{
+    display: grid;
+    gap: 10px;
+    background-color: var(--light-color);
+    .department_section{
+        display: grid;
+        gap: 5px;
+    }
+}

@@ -1,0 +1,158 @@
+<div class="wrapper border border-radius">
+	<header class="p20">
+		<h2>Кафедри</h2>
+		<div *ngIf="!showAddDepartmentPopup; else addDepartmentPopup">
+			<button  (click)="showAddDepartmentPopup = true"class="hover border border-radius p10">Додати</button>
+		</div>
+	</header>
+	
+	<div *ngIf="!errorMessage; else displayError">
+		<div *ngIf="preloaders.departments; else departments" class="p20">
+			<app-preloader></app-preloader>
+		</div>
+		<ng-template #departments>
+			<div class="content p20">
+				<div *ngFor="let dep of (departments$ | async); let i=index; " class="border border-radius p10 mb10">
+					<div class="department">
+						<a [routerLink]="[ '/department', dep.id ]">{{ dep.name | uppercase }} (
+							<b>{{ dep.abbr | uppercase }}</b>)
+						</a>
+						<span>{{ dep.founded | date: 'dd.LL.yyyy р.' }}</span>
+						<div class="edit_options_box">
+							<span>змінити</span>
+							<div class="edit_options">
+								<button (click)="setEditForm(i)"class="add p10">Швидко</button>
+								<a [routerLink]="[ '/department/edit', dep.id]" class="edit p10">Перейти на сторінку</a>
+							</div>
+						</div>
+						<button class="delete" (click)="deleteDepartment(dep.id)">видалити</button>
+					</div>
+
+					<div *ngIf="departmentEditForms[i]?.edit" class="mt10">
+						<form [formGroup]="departmentEditForms[i].form" (ngSubmit)="updateDepartment(i)" class="department_edit_form pt10">				
+							<label>Назва:
+								<input type="text" formControlName="name"
+									[ngClass]="{'warn': departmentEditForms[i].form.controls['name'].invalid && departmentEditForms[i].form.controls['name'].touched}">
+							</label>
+							<div *ngIf="departmentEditForms[i].form.controls['name'].invalid && departmentEditForms[i].form.controls['name'].touched" class="alert">
+								<app-message 
+									[type]="'warning'" 
+									[message]="'Введіть назву кафедри'" 
+									[classes]="'mb10'"></app-message>
+							</div>
+				
+							<label>Абревіатура:
+								<input type="text" formControlName="abbr"
+									[ngClass]="{'warn': departmentEditForms[i].form.controls['abbr'].invalid && departmentEditForms[i].form.controls['abbr'].touched}">
+							</label>
+							<div *ngIf="departmentEditForms[i].form.controls['abbr'].invalid && departmentEditForms[i].form.controls['abbr'].touched" class="alert">
+								<div *ngIf="departmentEditForms[i].form.controls['abbr'].errors.maxlength">
+									<app-message [type]="'warning'" [message]="'Максимальна кількість символів: 4'"
+										[classes]="'mb10'"></app-message>
+								</div>	
+								<div *ngIf="departmentEditForms[i].form.controls['abbr'].errors.required">
+									<app-message [type]="'warning'" [message]="'Введіть абревіатуру'"
+										[classes]="'mb10'"></app-message>
+								</div>
+							</div>
+							
+							<label>Утворено:
+								<input type="date" formControlName="founded" 
+									[ngClass]="{'warn': departmentEditForms[i].form.controls['founded'].invalid && departmentEditForms[i].form.controls['founded'].touched}">
+							</label>
+							<div *ngIf="departmentEditForms[i].form.controls['founded'].invalid && departmentEditForms[i].form.controls['founded'].touched" class="alert">
+								<app-message 
+									[type]="'warning'" 
+									[message]="'Введіть дату заснування'"></app-message>
+							</div>
+							
+							<div *ngIf="departmentEditForms[i].preloader; else editDepartmentPreloader">
+								<button type="button">
+									<app-preloader></app-preloader>
+								</button>
+							</div>
+							<ng-template #editDepartmentPreloader>
+								<div class="edit_button_group">
+									<button (click)="cancelEditForm(i)" 
+										type="button" class="cancel p10">скасувати</button>
+									<button [disabled]="!departmentEditForms[i].form.valid" 
+										class="add p10" type="submit">змінити</button>
+								</div>
+								<div *ngIf="departmentEditForms[i].form.errors?.unresolved" class="alert">
+									<app-message 
+										[type]="'warning'" 
+										[message]="departmentEditForms[i].form.errors.unresolved"></app-message>
+								</div>
+							</ng-template>
+						</form>
+					</div>
+					
+				</div>
+			</div>
+		</ng-template>
+	</div>
+	<ng-template #displayError>
+		<app-message [type]="'warning'" 
+			[message]="errorMessage"
+			[classes]="'m20'"></app-message>
+	</ng-template>
+</div>
+
+<ng-template #addDepartmentPopup>
+	<div class="popup_wrapper add_department">
+		<div class="fond" (click)="closeAddDepartmentPopup()"></div>
+		<form [formGroup]="departmentForm" (ngSubmit)="createDepartment()" class="popup">
+			<h3 class="mb10">Створити кафедру</h3>
+
+			<label>Назва:
+				<input type="text" formControlName="name"
+					[ngClass]="{'warn': departmentForm.controls['name'].invalid && departmentForm.controls['name'].touched}">
+			</label>
+			<div *ngIf="departmentForm.controls['name'].invalid && departmentForm.controls['name'].touched" class="alert">
+				<app-message 
+					[type]="'warning'" 
+					[message]="'Введіть назву кафедри'" 
+					[classes]="'mb10'"></app-message>
+			</div>
+
+			<label>Абревіатура:
+				<input type="text" formControlName="abbr"
+					[ngClass]="{'warn': departmentForm.controls['abbr'].invalid && departmentForm.controls['abbr'].touched}">
+			</label>
+			<div *ngIf="departmentForm.controls['abbr'].invalid && departmentForm.controls['abbr'].touched" class="alert">
+				<div *ngIf="departmentForm.controls['abbr'].errors.maxlength">
+					<app-message [type]="'warning'" [message]="'Максимальна кількість символів: 4'"
+						[classes]="'mb10'"></app-message>
+				</div>	
+				<div *ngIf="departmentForm.controls['abbr'].errors.required">
+					<app-message [type]="'warning'" [message]="'Введіть абревіатуру'"
+						[classes]="'mb10'"></app-message>
+				</div>
+			</div>
+			
+			<label>Утворено:
+				<input type="date" formControlName="founded" 
+					[ngClass]="{'warn': departmentForm.controls['founded'].invalid && departmentForm.controls['founded'].touched}">
+			</label>
+			<div *ngIf="departmentForm.controls['founded'].invalid && departmentForm.controls['founded'].touched" class="alert">
+				<app-message 
+					[type]="'warning'" 
+					[message]="'Введіть дату заснування'"></app-message>
+			</div>
+			
+			<div *ngIf="preloaders.createDepartment; else addDepartmentPreloader">
+				<button type="button">
+					<app-preloader></app-preloader>
+				</button>
+			</div>
+			<ng-template #addDepartmentPreloader>
+				<button class="add" type="submit" [disabled]="!departmentForm.valid">Створити</button>
+				<div *ngIf="departmentForm.errors?.unresolved" class="alert">
+					<app-message 
+						[type]="'warning'" 
+						[message]="departmentForm.errors.unresolved"></app-message>
+				</div>
+			</ng-template>
+		</form>
+	</div>
+</ng-template>

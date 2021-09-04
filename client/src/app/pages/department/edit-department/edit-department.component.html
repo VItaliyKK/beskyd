@@ -1,0 +1,72 @@
+<a [routerLink]="[ '/department/list' ]" class="breadcrumb mb20">Кафедри</a>
+
+<div class="wrapper border border-radius">
+	<header class="p20">
+		<h2>Редагувати:</h2>
+		<div>
+            <button class="delete ml20" [disabled]="preloader" (click)="deleteDepartment()">видалити</button>
+        </div>
+	</header>
+    <div *ngIf="!errorMessage; else displayError">
+        <div *ngIf="preloader; else departmentEdit" class="p20">
+            <app-preloader></app-preloader>
+        </div>
+        <ng-template #departmentEdit>
+            <form [formGroup]="departmentForm" (ngSubmit)="updateDepartment()" class="edit_form p20">
+                <label>Назва:
+                    <input type="text" formControlName="name"
+                        [ngClass]="{'warn': departmentForm.controls['name'].invalid && departmentForm.controls['name'].touched}">
+                </label>
+                <div *ngIf="departmentForm.controls['name'].invalid && departmentForm.controls['name'].touched">
+                    <div *ngIf="departmentForm.controls['name'].errors.required">
+                        <app-message [type]="'warning'" [message]="'Введіть назву'"
+                            [classes]="'mb10'"></app-message>
+                    </div>
+                </div>
+                <label>Абревіатура:
+                    <input type="text" formControlName="abbr"
+                        [ngClass]="{'warn': departmentForm.controls['abbr'].invalid && departmentForm.controls['abbr'].touched}">
+                </label>
+                <div *ngIf="departmentForm.controls['abbr'].invalid && departmentForm.controls['abbr'].touched">
+                    <div *ngIf="departmentForm.controls['abbr'].errors.maxlength">
+                        <app-message [type]="'warning'" [message]="'Максимальна кількість символів: 4'"
+                            [classes]="'mb10'"></app-message>
+                    </div>	
+                    <div *ngIf="departmentForm.controls['abbr'].errors.required">
+                        <app-message [type]="'warning'" [message]="'Введіть абревіатуру'"
+                            [classes]="'mb10'"></app-message>
+                    </div>
+                </div>
+                <label>Утворено:
+                    <input type="date" formControlName="founded"
+                        [ngClass]="{'warn': departmentForm.controls['founded'].invalid && departmentForm.controls['founded'].touched}">
+                </label>
+                <div *ngIf="departmentForm.controls['founded'].invalid && departmentForm.controls['founded'].touched">
+                    <div *ngIf="departmentForm.controls['founded'].errors.required">
+                        <app-message [type]="'warning'" [message]="'Введіть назву'"
+                            [classes]="'mb10'"></app-message>
+                    </div>
+                </div>
+
+                <div *ngIf="preloader; else editDepartment">
+                    <button type="button">
+                        <app-preloader></app-preloader>
+                    </button>
+                </div>
+                <ng-template #editDepartment>
+                    <button [disabled]="!departmentForm.valid" class="add border-radius border p10" type="submit">оновити</button>
+                    <div *ngIf="departmentForm.errors?.unresolved" class="alert">
+                        <app-message 
+                            [type]="'warning'" 
+                            [message]="departmentForm.errors.unresolved"></app-message>
+                    </div>
+                </ng-template>
+            </form>
+        </ng-template>
+    </div>
+    <ng-template #displayError>
+		<app-message [type]="'warning'" 
+			[message]="errorMessage"
+			[classes]="'m20'"></app-message>
+	</ng-template>
+</div>

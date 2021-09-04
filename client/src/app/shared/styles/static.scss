@@ -13,7 +13,17 @@
 .hover:hover{
     background-color: var(--soft-light-color);
 }
+.breadcrumb{
+    display: block;
+    text-decoration: underline;
+}
 /*------------ margin ------------*/
+.m10{
+    margin: 10px;
+}
+.m20{
+    margin: 20px;
+}
 .mt20{
     margin-top: 20px;
 }
@@ -68,4 +78,9 @@
 }
 .pr10{
     padding-right: 10px;
+}
+/*------------ button ------------*/
+button{
+    background-color: transparent;
+    text-transform: uppercase;
 }

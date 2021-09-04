@@ -1,0 +1,31 @@
+.header{
+	position: sticky;
+    top: 0;
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    height: 70px;
+    .logo{
+    	filter: invert(1);
+    }
+    .limit{
+    	display: grid;
+    	grid-auto-flow: column;
+    	gap: 20px;
+    	align-items: center;
+        height: 100%;
+    }
+    .nav{
+    	justify-self: end;
+    	.link{
+    		color: var(--middle-color);
+    		&:hover{
+    			color: var(--light-color);
+    		}
+            &.active {
+                color: var(--primary-color);
+                border-color: var(--primary-color);
+            }
+    	}
+    }
+
+}

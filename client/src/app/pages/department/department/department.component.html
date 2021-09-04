@@ -1,0 +1,37 @@
+<a [routerLink]="[ '/department/list' ]" class="breadcrumb mb20">Кафедри</a>
+
+<div class="wrapper border border-radius">
+	<header class="p20">
+		<h2>Кафедра: <b>{{ department?.name | uppercase }}</b></h2>
+		<div>
+            <button [disabled]="preloader">
+				<a [routerLink]="[ '/department/edit', id ]" class="edit">змінити</a>
+			</button>
+            <button class="delete ml20" [disabled]="preloader" (click)="deleteDepartment()">видалити</button>
+        </div>
+	</header>
+	
+	<div *ngIf="preloader; else departmentInfo" class="p20">
+		<app-preloader></app-preloader>
+	</div>
+	<ng-template #departmentInfo>
+		<div class="department p20">
+            <div class="department_section border border-radius p10">
+				<b>Назва:</b>
+				<p>{{ department?.name | uppercase }}</p>
+			</div>
+			<div class="department_section border border-radius p10">
+				<b>Абревіатура:</b>
+				<p>{{ department?.abbr | uppercase }}</p>
+			</div>
+			<div class="department_section border border-radius p10">
+				<b>Утворено:</b>
+				<p>{{ department?.founded | date: 'dd.LL.yyyy р.' }}</p>
+			</div>
+			<div class="department_section border border-radius p10">
+				<b>Запис створено:</b>
+				<p>{{ department?.created_at | date: 'dd.LL.yyyy р.' }}</p>
+			</div>
+		</div>
+	</ng-template>
+</div>

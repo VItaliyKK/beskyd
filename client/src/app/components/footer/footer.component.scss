@@ -1,0 +1,10 @@
+footer{
+    height: 50px;
+    background-color: var(--soft-dark-color);
+    color: var(--light-color);
+    .limit{
+        display: grid;
+        place-content: center;
+        height: 100%;
+    }
+}
