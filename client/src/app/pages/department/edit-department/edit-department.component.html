@@ -14,8 +14,7 @@
         <ng-template #departmentEdit>
             <form [formGroup]="departmentForm" (ngSubmit)="updateDepartment()" class="edit_form p20">
                 <label>Назва:
-                    <input type="text" formControlName="name"
-                        [ngClass]="{'warn': departmentForm.controls['name'].invalid && departmentForm.controls['name'].touched}">
+                    <input type="text" formControlName="name">
                 </label>
                 <div *ngIf="departmentForm.controls['name'].invalid && departmentForm.controls['name'].touched">
                     <div *ngIf="departmentForm.controls['name'].errors.required">
@@ -24,8 +23,7 @@
                     </div>
                 </div>
                 <label>Абревіатура:
-                    <input type="text" formControlName="abbr"
-                        [ngClass]="{'warn': departmentForm.controls['abbr'].invalid && departmentForm.controls['abbr'].touched}">
+                    <input type="text" formControlName="abbr">
                 </label>
                 <div *ngIf="departmentForm.controls['abbr'].invalid && departmentForm.controls['abbr'].touched">
                     <div *ngIf="departmentForm.controls['abbr'].errors.maxlength">
@@ -38,15 +36,14 @@
                     </div>
                 </div>
                 <label>Утворено:
-                    <input type="date" formControlName="founded"
-                        [ngClass]="{'warn': departmentForm.controls['founded'].invalid && departmentForm.controls['founded'].touched}">
+                    <input type="date" formControlName="founded">
                 </label>
-                <div *ngIf="departmentForm.controls['founded'].invalid && departmentForm.controls['founded'].touched">
+                <ng-template [ngIf]="departmentForm.controls['founded'].invalid && departmentForm.controls['founded'].touched">
                     <div *ngIf="departmentForm.controls['founded'].errors.required">
                         <app-message [type]="'warning'" [message]="'Введіть назву'"
                             [classes]="'mb10'"></app-message>
                     </div>
-                </div>
+                </ng-template>
 
                 <div *ngIf="preloader; else editDepartment">
                     <button type="button">
@@ -56,17 +53,15 @@
                 <ng-template #editDepartment>
                     <button [disabled]="!departmentForm.valid" class="add border-radius border p10" type="submit">оновити</button>
                     <div *ngIf="departmentForm.errors?.unresolved" class="alert">
-                        <app-message 
-                            [type]="'warning'" 
+                        <app-message  [type]="'warning'" 
                             [message]="departmentForm.errors.unresolved"></app-message>
                     </div>
                 </ng-template>
             </form>
         </ng-template>
     </div>
+
     <ng-template #displayError>
-		<app-message [type]="'warning'" 
-			[message]="errorMessage"
-			[classes]="'m20'"></app-message>
+		<app-message [type]="'warning'" [message]="errorMessage" [classes]="'m20'"></app-message>
 	</ng-template>
 </div>

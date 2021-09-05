@@ -5,7 +5,7 @@ const db = require('../database/db');
 
 
 exports.list = (req, res) => {
-	const sql = "SELECT * FROM `groups` LEFT OUTER JOIN `departments` ON departments.id = groups.department_id";
+	const sql = "SELECT `groups`.`id`, `groups`.`abbr`, `groups`.`form_education`, `groups`.`department_id`, `groups`.`max_quantity_members`, `departments`.`name` FROM `groups` LEFT OUTER JOIN `departments` ON departments.id = groups.department_id";
 
 	db.query(sql, (error, rows, fields) => {
 		if( error ){
@@ -23,8 +23,8 @@ exports.single = (req, res) => {
 			'message': 'Bad query parameter: id'
 		}, res);
 	}
-
-	const sql = "SELECT * FROM `groups` LEFT OUTER JOIN `departments` ON departments.id = groups.department_id WHERE `groups`.`id` = " + req.params.id;
+	
+	const sql = "SELECT `groups`.`id`, `groups`.`abbr`, `groups`.`form_education`, `groups`.`department_id`, `groups`.`max_quantity_members`, `departments`.`name` FROM `groups` LEFT OUTER JOIN `departments` ON departments.id = groups.department_id WHERE `groups`.`id` = " + req.params.id;
 
 	db.query(sql, (error, rows, fields) => {
 		if( error ){

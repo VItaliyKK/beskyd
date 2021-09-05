@@ -1,1 +1,192 @@
-<p>groups works!</p>
+<div class="wrapper border border-radius">
+	<header class="p20">
+		<h2>Групи</h2>
+		<div *ngIf="!showAddGroupPopup; else addGroupPopup">
+			<button  (click)="showAddGroupPopup = true"class="hover border border-radius p10">Додати</button>
+		</div>
+	</header>
+	
+	<div *ngIf="!errorMessage; else displayError">
+		<div *ngIf="preloaders.groups; else groups" class="p20">
+			<app-preloader></app-preloader>
+		</div>
+		<ng-template #groups>
+			<div class="content p20">
+				<div *ngFor="let dep of (groups$ | async); let i=index; " class="hover border border-radius p10 mb10">
+					<div class="group">
+						<a [routerLink]="[ '/group', dep.id ]">{{ dep.abbr | uppercase }} (
+							<b>{{ dep.form_education | uppercase }}</b>) 
+							<p><em>Кафедра:</em> {{ dep.name | uppercase }}</p>
+						</a>
+						<span>{{ dep.max_quantity_members | date: 'dd.LL.yyyy р.' }}</span>
+						<div class="edit_options_box">
+							<span>змінити</span>
+							<div class="edit_options">
+								<button (click)="setEditForm(i)"class="add p10">Швидко</button>
+								<a [routerLink]="[ '/group/edit', dep.id]" class="edit p10">Перейти на сторінку</a>
+							</div>
+						</div>
+						<button class="delete" (click)="deleteGroup(dep.id)">видалити</button>
+					</div>
+
+					<div *ngIf="groupEditForms[i]?.edit" class="mt10">
+						<form [formGroup]="groupEditForms[i].form" (ngSubmit)="updateGroup(i)" class="group_edit_form pt10">
+							<label>Кафедра:
+								<select formControlName="department_id" [ngModel]="groupEditForms[i].form.value.department_id"
+									[ngClass]="{'warn': groupEditForms[i].form.controls['department_id'].invalid && groupEditForms[i].form.controls['department_id'].touched}">
+									<option *ngFor="let depart of departments;" [value]="depart.id"
+										[selected]="groupEditForms[i].department == depart.id">{{ depart.name }}</option>
+									}
+								</select>
+							</label>
+							<div *ngIf="groupEditForms[i].form.controls['form_education'].invalid && groupEditForms[i].form.controls['form_education'].touched" class="alert">
+								<app-message 
+									[type]="'warning'" 
+									[message]="'Виберіть кафедру'" 
+									[classes]="'mb10'"></app-message>
+							</div>			
+
+							<label>Абревіатура:
+								<input type="text" formControlName="abbr"
+									[ngClass]="{'warn': groupEditForms[i].form.controls['abbr'].invalid && groupEditForms[i].form.controls['abbr'].touched}">
+							</label>
+							<div *ngIf="groupEditForms[i].form.controls['abbr'].invalid && groupEditForms[i].form.controls['abbr'].touched" class="alert">
+								<div *ngIf="groupEditForms[i].form.controls['abbr'].errors.maxlength">
+									<app-message [type]="'warning'" [message]="'Максимальна кількість символів: 6'"
+										[classes]="'mb10'"></app-message>
+								</div>	
+								<div *ngIf="groupEditForms[i].form.controls['abbr'].errors.required">
+									<app-message [type]="'warning'" [message]="'Введіть абревіатуру'"
+										[classes]="'mb10'"></app-message>
+								</div>
+							</div>
+							
+							<label>Форма навчання:
+								<select formControlName="form_education" [ngModel]="groupEditForms[i].form.value.form_education"
+									[ngClass]="{'warn': groupEditForms[i].form.controls['form_education'].invalid && groupEditForms[i].form.controls['form_education'].touched}">
+									<option value="Денна" [selected]="groupEditForms[i].form_education == 'Денна'">Денна</option>
+									<option value="Заочна" [selected]="groupEditForms[i].form_education == 'Заочна'">Заочна</option>
+								</select>
+							</label>
+							<div *ngIf="groupEditForms[i].form.controls['form_education'].invalid && groupEditForms[i].form.controls['form_education'].touched" class="alert">
+								<app-message 
+									[type]="'warning'" 
+									[message]="'Виберіть форму навчання'" 
+									[classes]="'mb10'"></app-message>
+							</div>
+
+							<label>Максимальна кількість студентів:
+								<input type="number" formControlName="max_quantity_members" max="30" min="1" 
+									[ngClass]="{'warn': groupEditForms[i].form.controls['max_quantity_members'].invalid && groupEditForms[i].form.controls['max_quantity_members'].touched}">
+							</label>
+							<div *ngIf="groupEditForms[i].form.controls['max_quantity_members'].invalid && groupEditForms[i].form.controls['max_quantity_members'].touched" class="alert">
+								<div *ngIf="groupEditForms[i].form.controls['max_quantity_members'].errors.maxlength">
+									<app-message [type]="'warning'" [message]="'Максимальна кількість студентів: 30'"
+										[classes]="'mb10'"></app-message>
+								</div>	
+								<div *ngIf="groupEditForms[i].form.controls['max_quantity_members'].errors.required">
+									<app-message [type]="'warning'" [message]="'Виберіть максимальну кількість студентів'"
+										[classes]="'mb10'"></app-message>
+								</div>
+							</div>
+							
+							<div *ngIf="groupEditForms[i].preloader; else editGroupPreloader">
+								<button type="button">
+									<app-preloader></app-preloader>
+								</button>
+							</div>
+							<ng-template #editGroupPreloader>
+								<div class="edit_button_group">
+									<button (click)="cancelEditForm(i)" 
+										type="button" class="cancel p10">скасувати</button>
+									<button [disabled]="!groupEditForms[i].form.valid" 
+										class="add p10" type="submit">змінити</button>
+								</div>
+								<div *ngIf="groupEditForms[i].form.errors?.unresolved" class="alert">
+									<app-message 
+										[type]="'warning'" 
+										[message]="groupEditForms[i].form.errors.unresolved"></app-message>
+								</div>
+							</ng-template>
+						</form>
+					</div>
+					
+				</div>
+			</div>
+		</ng-template>
+	</div>
+	<ng-template #displayError>
+		<app-message [type]="'warning'" 
+			[message]="errorMessage"
+			[classes]="'m20'"></app-message>
+	</ng-template>
+</div>
+
+<ng-template #addGroupPopup>
+	<div class="popup_wrapper add_group">
+		<div class="fond" (click)="closeAddGroupPopup()"></div>
+		<form [formGroup]="groupForm" (ngSubmit)="createGroup()" class="popup">
+			<h3 class="mb10">Створити групу</h3>
+
+			<label>Абревіатура:
+				<input type="text" formControlName="abbr"
+					[ngClass]="{'warn': groupForm.controls['abbr'].invalid && groupForm.controls['abbr'].touched}">
+			</label>
+			<div *ngIf="groupForm.controls['abbr'].invalid && groupForm.controls['abbr'].touched" class="alert">
+				<div *ngIf="groupForm.controls['abbr'].errors.maxlength">
+					<app-message [type]="'warning'" [message]="'Максимальна кількість символів: 6'"
+						[classes]="'mb10'"></app-message>
+				</div>	
+				<div *ngIf="groupForm.controls['abbr'].errors.required">
+					<app-message [type]="'warning'" [message]="'Введіть абревіатуру'"
+						[classes]="'mb10'"></app-message>
+				</div>
+			</div>
+
+			<label>Кафедра:
+				<select formControlName="department_id" [ngModel]="groupForm.value.department_id"
+					[ngClass]="{'warn': groupForm.controls['department_id'].invalid && groupForm.controls['department_id'].touched}">
+					<option *ngFor="let dep of departments;" [value]="dep.id">{{ dep.name }}</option>
+				</select>
+			</label>
+			<div *ngIf="groupForm.controls['department_id'].invalid && groupForm.controls['department_id'].touched" class="alert">
+				<app-message 
+					[type]="'warning'" 
+					[message]="'Виберіть кафедру'" 
+					[classes]="'mb10'"></app-message>
+			</div>
+
+			<label>Форма навчання:
+				<select formControlName="form_education" [ngModel]="groupForm.value.form_education">
+					<option value="Денна">Денна</option>
+					<option value="Заочна">Заочна</option>
+				</select>
+			</label>
+			<ng-template [ngIf]="groupForm.controls['form_education'].invalid && groupForm.controls['form_education'].touched" class="alert">
+				<app-message [type]="'warning'" [message]="'Виберіть форму навчання'" [classes]="'mb10'"></app-message>
+			</ng-template>
+			
+			<label>Максимальна кількість студентів:
+				<input type="number" formControlName="max_quantity_members" max="30" min="1" 
+					[ngClass]="{'warn': groupForm.controls['max_quantity_members'].invalid && groupForm.controls['max_quantity_members'].touched}">
+			</label>
+			<ng-template [ngIf]="groupForm.controls['max_quantity_members'].invalid && groupForm.controls['max_quantity_members'].touched" class="alert">
+				<app-message [type]="'warning'" [message]="'Виберіть максимальну кількість студентів'"></app-message>
+			</ng-template>
+			
+			<div *ngIf="preloaders.createGroup; else addGroupPreloader">
+				<button type="button">
+					<app-preloader></app-preloader>
+				</button>
+			</div>
+			<ng-template #addGroupPreloader>
+				<button class="add" type="submit" [disabled]="!groupForm.valid">Створити</button>
+				<div *ngIf="groupForm.errors?.unresolved" class="alert">
+					<app-message 
+						[type]="'warning'" 
+						[message]="groupForm.errors.unresolved"></app-message>
+				</div>
+			</ng-template>
+		</form>
+	</div>
+</ng-template>

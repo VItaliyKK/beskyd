@@ -1,1 +1,42 @@
-<p>students works!</p>
+<div class="wrapper border border-radius">
+	<header class="p20">
+		<h2>Студенти</h2>
+
+		<a [routerLink]="[ '/student/add' ]" class="hover border border-radius p10">Додати</a>
+	</header>
+
+	<div *ngIf="!errorMessage; else displayError">
+		<div *ngIf="preloader; else studentsList" class="p20">
+			<app-preloader></app-preloader>
+		</div>
+		<ng-template #studentsList>
+			<div class="content p20">
+				<div *ngFor="let student of (students$ | async); let i=index; " class="hover border border-radius p10 mb10">
+					<header class="p10">
+						<span>{{ i+1 }}</span>
+						<div>
+							<a [routerLink]="[ '/student/edit', student.id]" class="edit p10">змінити</a>
+							<button class="delete" (click)="deleteStudent(student.id)">видалити</button>
+						</div>
+					</header>
+					<a [routerLink]="[ '/student', student.id ]" class="pt20">
+						<p><b>Ім'я:</b> {{ student.name }}</p>
+						<p><b>Прізвище:</b> {{ student.last_name }}</p>
+						<p><b>По батькові:</b> {{ student.surname }}</p>
+						<p><b>Дата народження: </b>{{ student.birthdate | date: 'dd.LL.yyyy р.' }}</p>
+						<p><b>Email: </b>{{ student.email }}</p>
+						<p><b>Кафедра: </b>{{ student.department_name }}</p>
+						<p><b>Група: </b>{{ student.abbr }}</p>
+						<p><b>Форма навчання: </b>{{ student.form_education }}</p>
+						<p><b>Запис створено: </b>{{ student.created_at | date: 'dd.LL.yyyy р.' }}</p>
+					</a>
+				</div>
+			</div>
+		</ng-template>
+	</div>
+	<ng-template #displayError>
+		<app-message [type]="'warning'" 
+			[message]="errorMessage"
+			[classes]="'m20'"></app-message>
+	</ng-template>
+</div>

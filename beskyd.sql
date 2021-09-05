@@ -55,7 +55,7 @@ INSERT INTO `departments` (`id`, `name`, `abbr`, `founded`, `logo`, `created_at`
 CREATE TABLE `groups` (
   `id` int(11) NOT NULL,
   `abbr` text NOT NULL,
-  `form_education` enum('full-time','stationary') NOT NULL DEFAULT 'full-time',
+  `form_education` enum('Денна','Заочна') NOT NULL DEFAULT 'Денна',
   `department_id` int(11) NOT NULL,
   `max_quantity_members` int(11) NOT NULL DEFAULT '25'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -65,8 +65,8 @@ CREATE TABLE `groups` (
 --
 
 INSERT INTO `groups` (`id`, `abbr`, `form_education`, `department_id`, `max_quantity_members`) VALUES
-(1, 'ар-11', 'full-time', 3, 25),
-(2, 'фн-21', 'stationary', 2, 10);
+(1, 'ар-11', 'Денна', 3, 25),
+(2, 'фн-21', 'Заочна', 2, 10);
 
 -- --------------------------------------------------------
 
@@ -81,6 +81,7 @@ CREATE TABLE `students` (
   `last_name` text NOT NULL,
   `surname` text NOT NULL,
   `email` text,
+  `city` text,
   `birthdate` date NOT NULL,
   `logo` text,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -90,8 +91,8 @@ CREATE TABLE `students` (
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`id`, `group_id`, `name`, `last_name`, `surname`, `email`, `birthdate`, `logo`, `created_at`) VALUES
-(1, 1, 'Петро', 'Петрович', 'Петрів', NULL, '2000-09-01', NULL, '2021-08-31 21:40:53');
+INSERT INTO `students` (`id`, `group_id`, `name`, `last_name`, `surname`, `email`, `city` , `birthdate`, `logo`, `created_at`) VALUES
+(1, 1, 'Петро', 'Петрович', 'Петрів', NULL, 'Lviv' , '2000-09-01', NULL, '2021-08-31 21:40:53');
 
 --
 -- Indexes for dumped tables

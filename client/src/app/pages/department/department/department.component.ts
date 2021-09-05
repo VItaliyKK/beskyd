@@ -39,7 +39,7 @@ export class DepartmentComponent implements OnInit {
     this.departmentService.deleteDepartment(this.id)
       .then( () => this.router.navigateByUrl(`/department/list`))
       .catch( err => {
-        console.log(err)
+        // handle error
       })
   }
 }

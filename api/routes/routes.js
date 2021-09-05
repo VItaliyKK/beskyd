@@ -21,7 +21,9 @@ module.exports = (app) => {
 
 	const studentController = require('../controllers/StudentController.js');
 
+	app.route('/api/student/get/list/full').get(studentController.fulllist);
 	app.route('/api/student/get/list').get(studentController.list);
+	app.route('/api/student/:id/full').get(studentController.fullsingle);
 	app.route('/api/student/:id').get(studentController.single);
 	app.route('/api/student/add').post(studentController.add);
 	app.route('/api/student/:id').put(studentController.update);

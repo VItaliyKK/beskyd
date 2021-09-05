@@ -40,9 +40,23 @@
             padding: 5px 10px;
         }
     }
+    .ng-invalid.ng-touched{
+        border: 1px solid red;
+    }
     .edit_button_group{
         display: grid;
         grid-auto-flow: column;
         gap: 20px;
+    }
+}
+
+@media screen and (max-width: 756px) {
+    .content{
+        padding: 10px;
+    }
+    .department{
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 5px;
     }
 }

@@ -3,6 +3,8 @@ import { DepartmentService } from '../../../shared/services/department.service';
 import { IDepartment } from '../../../shared/interfaces/department.interface';
 import { Observable } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import * as moment from 'moment';
+
 
 @Component({
   selector: 'app-departments',
@@ -43,11 +45,11 @@ export class DepartmentsComponent implements OnInit {
   }
 
   createDepartment():any{
-    this.preloaders.departments = true;
+    this.preloaders.createDepartment = true;
     this.departmentService.createDepartment(this.departmentForm.value)
       .then( res => {
-        console.log('CREATED DEPARTMENT:', res)
         this.closeAddDepartmentPopup();
+        this.getAllDepartments();
       })
       .catch( err => {
         this.departmentForm.setErrors({
@@ -55,19 +57,18 @@ export class DepartmentsComponent implements OnInit {
         })
       })
       .finally( () => {
-        this.preloaders.departments = false;
+        this.preloaders.createDepartment = false;
       })
   }
 
   deleteDepartment(id:number): void {
     this.departmentService.deleteDepartment(id)
-      .then( res => {
-        console.log('DELETED DEPARTMENT:', res)
+      .then( () => {
         this.closeAddDepartmentPopup();
         this.getAllDepartments();
       })
       .catch( err => {
-        console.log(err)
+        // handle error
       })
   }
 
@@ -84,10 +85,11 @@ export class DepartmentsComponent implements OnInit {
         abbr: new FormControl('', [Validators.required, Validators.maxLength(4)]),
         founded: new FormControl('', Validators.required)
       });
+      const date = moment(dep.founded).format("YYYY-MM-DD");
       newFormGroup.setValue({
         name: dep.name,
         abbr: dep.abbr,
-        founded: dep.founded
+        founded: date
       })
       this.departmentEditForms.push({
         preloader:false,
@@ -96,7 +98,6 @@ export class DepartmentsComponent implements OnInit {
         form: newFormGroup
       })
     });
-    console.log(this.departmentEditForms);
   }
 
   cancelEditForm(i:number){

@@ -23,6 +23,7 @@ import { EditGroupComponent } from './pages/group/edit-group/edit-group.componen
 import { StudentsComponent } from './pages/student/students/students.component';
 import { StudentComponent } from './pages/student/student/student.component';
 import { EditStudentComponent } from './pages/student/edit-student/edit-student.component';
+import { AddStudentComponent } from './pages/student/add-student/add-student.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { EditStudentComponent } from './pages/student/edit-student/edit-student.
     EditGroupComponent,
     StudentsComponent,
     StudentComponent,
-    EditStudentComponent
+    EditStudentComponent,
+    AddStudentComponent
   ],
   imports: [
     BrowserModule,
