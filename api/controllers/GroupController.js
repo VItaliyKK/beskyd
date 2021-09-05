@@ -5,7 +5,7 @@ const db = require('../database/db');
 
 
 exports.list = (req, res) => {
-	const sql = "SELECT * FROM `groups`";
+	const sql = "SELECT * FROM `groups` LEFT OUTER JOIN `departments` ON departments.id = groups.department_id";
 
 	db.query(sql, (error, rows, fields) => {
 		if( error ){
@@ -24,7 +24,7 @@ exports.single = (req, res) => {
 		}, res);
 	}
 
-	const sql = "SELECT * FROM `groups` WHERE `id` = " + req.params.id;
+	const sql = "SELECT * FROM `groups` LEFT OUTER JOIN `departments` ON departments.id = groups.department_id WHERE `groups`.`id` = " + req.params.id;
 
 	db.query(sql, (error, rows, fields) => {
 		if( error ){
