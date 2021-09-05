@@ -23,7 +23,9 @@ export class GroupComponent implements OnInit {
     private departmentService: DepartmentService,
     private route: ActivatedRoute,
     private router: Router
-  ) { this.id = this.route.snapshot.params['id'] }
+  ) { 
+    this.id = this.route.snapshot.params['id'] 
+  }
 
   ngOnInit(): void {
     this.getGroup();
@@ -37,7 +39,6 @@ export class GroupComponent implements OnInit {
     this.preloader = true
     this.group$ = this.groupService.getGroup(this.id)
     this.group$.subscribe( dep => {
-      console.log(dep)
       this.group = dep
       this.preloader = false
     })
@@ -48,7 +49,7 @@ export class GroupComponent implements OnInit {
     this.groupService.deleteGroup(this.id)
       .then( () => this.router.navigateByUrl(`/group/list`))
       .catch( err => {
-        console.log(err)
+        // handle error
       })
   }
 }

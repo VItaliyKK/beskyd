@@ -10,9 +10,9 @@
             border-radius: var(--border-radius);
             height: 100%;
             padding: 0 10px;
-            &.warn{
-                border-color: red;
-            }
+        }
+        .ng-invalid.ng-touched{
+            border: 1px solid red;
         }
     }
     button[type="submit"]{

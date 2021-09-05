@@ -1,1 +1,37 @@
-<p>student works!</p>
+<a [routerLink]="[ '/student/list' ]" class="breadcrumb mb20">Студенти</a>
+
+<div class="wrapper border border-radius">
+	<header class="p20">
+		<h2>Студент</h2>
+
+		<button class="hover delete border border-radius p10" (click)="deleteStudent()">Видалити</button>
+	</header>
+
+	<div *ngIf="preloader; else studentsList" class="p20">
+		<app-preloader></app-preloader>
+	</div>
+	<ng-template #studentsList>
+		<div class="content p20">
+			<div class="student border border-radius p10 mb10">
+				<header class="student_header pb10">
+					<a [routerLink]="[ '/student', id ]">{{ student?.name | uppercase }}</a>
+					<a [routerLink]="[ '/student/edit', id]" class="edit p10">Змінити</a>
+				</header>
+				<div class="student_info">
+					<p class="mt20"><b>Ім'я:</b> {{ student?.name }}</p>
+					<p class="mt20"><b>Прізвище:</b> {{ student?.last_name }}</p>
+					<p class="mt20"><b>По батькові:</b> {{ student?.surname }}</p>
+					<p class="mt20"><b>Дата народження:</b> {{ student?.birthdate }}</p>
+					<p class="mt20"><b>Email:</b> {{ student?.email }}</p>
+					<p class="mt20"><b>Кафедра:</b> {{ student?.department_name }}</p>
+					<p class="mt20"><b>Група:</b> {{ student?.abbr }}</p>
+					<p class="mt20"><b>Форма навчання:</b> {{ student?.form_education }}</p>
+				</div>
+			</div>
+		</div>
+	</ng-template>
+</div>
+
+<div *ngIf="errorMessage">
+	<app-message [type]="'warning'" [message]="errorMessage" [classes]="'m20'"></app-message>
+</div>

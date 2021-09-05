@@ -1,19 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { IDepartment } from 'src/app/shared/interfaces/department.interface';
 import { DepartmentService } from 'src/app/shared/services/department.service';
 import { GroupService } from 'src/app/shared/services/group.service';
 import { StudentService } from 'src/app/shared/services/student.service';
-import * as moment from 'moment';
 
 @Component({
-  selector: 'app-edit-student',
-  templateUrl: './edit-student.component.html',
-  styleUrls: ['./edit-student.component.scss']
+  selector: 'app-add-student',
+  templateUrl: './add-student.component.html',
+  styleUrls: ['./add-student.component.scss']
 })
-export class EditStudentComponent implements OnInit {
-  id:number
+export class AddStudentComponent implements OnInit {
   preloader: boolean = false
   message = {
     value: '',
@@ -38,15 +35,10 @@ export class EditStudentComponent implements OnInit {
   constructor(
     private studentService: StudentService,
     private groupService: GroupService,
-    private departmentService: DepartmentService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {
-    this.id = this.route.snapshot.params['id']
-  }
+    private departmentService: DepartmentService
+  ) { }
 
   ngOnInit(): void {
-    this.getStudent()
     this.groupService.getGroups().toPromise()
       .then( groups => {
         this.groups.all = groups
@@ -54,45 +46,23 @@ export class EditStudentComponent implements OnInit {
     this.departmentService.getDepartments().toPromise()
       .then( departments => {
         this.departments = departments
-      }).then( () => {
-        this.filterSituableOptions(null, this.student.value.department_id)
-      })
+      })  
   }
 
-  getStudent():void{
-    this.studentService.getStudent(this.id).toPromise()
-    .then( student => {
-      this.student.setValue({
-        name:           student.name,
-        last_name:      student.last_name,
-        surname:        student.surname,
-        email:          student.email,
-        birthdate:      moment(student.birthdate).format("YYYY-MM-DD"),
-        group_id:       student.group_id,
-        department_id:  student.department_id,
-        form_education: student.form_education
-      })
-    }).catch( err => {      
-      if(err.status === 404){
-        this.router.navigateByUrl(`/not-found`)
-      }else{
-        this.message.type = 'failed'
-        this.message.value = err.message
-      }
-    })
-  }
-
-  updateStudent(): void {
+  createStudent(): void {
     this.preloader = true
-    this.studentService.updateStudent({ id:this.id, ...this.student.value})
+    this.studentService.createStudent(this.student.value)
       .then( () => {
+        this.student.reset()
         this.message.type = 'success'
-        this.message.value = 'Запис оновлено.'
-      }).catch(err => {
+        this.message.value = 'Студент доданий.'
+      })
+      .catch(err => {
         this.student.setErrors({
           'unresolved': err.message
         })
-      }).finally(() => {
+      })
+      .finally(() => {
         this.preloader = false;
       })
   }

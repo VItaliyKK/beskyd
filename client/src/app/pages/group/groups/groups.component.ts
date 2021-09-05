@@ -52,10 +52,9 @@ export class GroupsComponent implements OnInit {
   }
 
   createGroup():any{
-    // console.log(this.groupForm.value);
     this.preloaders.createGroup = true;
     this.groupService.createGroup(this.groupForm.value)
-      .then( res => {
+      .then( () => {
         this.closeAddGroupPopup();
         this.getAllGroups();
       })
@@ -71,12 +70,12 @@ export class GroupsComponent implements OnInit {
 
   deleteGroup(id:number): void {
     this.groupService.deleteGroup(id)
-      .then( res => {
+      .then( () => {
         this.closeAddGroupPopup();
         this.getAllGroups();
       })
       .catch( err => {
-        console.log(err)
+        // handle error
       })
   }
 
@@ -109,7 +108,6 @@ export class GroupsComponent implements OnInit {
         form: newFormGroup
       })
     });
-    console.log('groupEditForms:',this.groupEditForms);
   }
 
   cancelEditForm(i:number){
@@ -121,12 +119,11 @@ export class GroupsComponent implements OnInit {
   }
 
   updateGroup(i:number):void {
-    console.log('updateGroup->groupEditForms:' , this.groupEditForms[i].form.value );
     this.groupEditForms[i].preloader = true
     this.groupService.updateGroup({
       id: this.groupEditForms[i].id,
       ...this.groupEditForms[i].form.value
-    }).then( res => {
+    }).then( () => {
       this.getAllGroups();
     })
     .catch( err => {

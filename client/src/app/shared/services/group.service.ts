@@ -15,9 +15,6 @@ export class GroupService {
   getGroups(): Observable<IGroup[]> {
     return this.http.get('group/get/list')
     .pipe( map( d => (d as IResponse).result ))
-    // getGroups(): Observable<any> {
-    //   return this.http.get('Groups')
-    //     .pipe( map( d => d )) 
     }
   
     getGroup(id:number): Observable<any> {

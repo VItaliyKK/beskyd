@@ -9,7 +9,6 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class APIInterceptor implements HttpInterceptor {
-  // host:string = 'https://my-json-server.typicode.com/VItaliyKK/json-server';
   host:string = 'http://localhost:3500/api';
   
   constructor( ) {}

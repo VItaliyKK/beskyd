@@ -84,8 +84,8 @@ body{
             border-radius: var(--border-radius);
             outline: none;
         }
-        .warn{
-            border: 1px solid rgb(255 18 0 / 50%);
+        .ng-invalid.ng-touched{
+            border: 1px solid red;
         }
     }
     .fond{

@@ -44,6 +44,12 @@ export class EditDepartmentComponent implements OnInit {
           founded: date
         })
         this.preloader = false
+      }).catch( err => {
+        if(err.status === 404){
+          this.router.navigateByUrl(`/not-found`)
+        }else{
+          this.errorMessage = err.message
+        }
       })
   }
 

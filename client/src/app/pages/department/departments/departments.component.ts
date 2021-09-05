@@ -63,13 +63,12 @@ export class DepartmentsComponent implements OnInit {
 
   deleteDepartment(id:number): void {
     this.departmentService.deleteDepartment(id)
-      .then( res => {
-        console.log('DELETED DEPARTMENT:', res)
+      .then( () => {
         this.closeAddDepartmentPopup();
         this.getAllDepartments();
       })
       .catch( err => {
-        console.log(err)
+        // handle error
       })
   }
 
@@ -99,7 +98,6 @@ export class DepartmentsComponent implements OnInit {
         form: newFormGroup
       })
     });
-    console.log(this.departmentEditForms);
   }
 
   cancelEditForm(i:number){

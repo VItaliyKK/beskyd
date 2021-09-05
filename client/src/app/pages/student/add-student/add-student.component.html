@@ -2,11 +2,11 @@
 
 <div class="wrapper border border-radius mb20">
     <header class="p20">
-        <h2>Редагувати студента</h2>
+        <h2>Додати студента</h2>
     </header>
 
     <div class="content p20">
-        <form [formGroup]="student" (ngSubmit)="updateStudent()" class="edit_student_form pt10">
+        <form [formGroup]="student" (ngSubmit)="createStudent()" class="add_student_form pt10">
             <label for="name">Ім'я:</label>
             <input type="text" formControlName="name" id="name">
             <ng-template [ngIf]="student.controls['name'].invalid && student.controls['name'].touched">
@@ -26,7 +26,7 @@
                 </app-message>
             </ng-template>
 
-            <label for="birthdate">Прізвище:</label>
+            <label for="birthdate">Дата народження:</label>
             <input type="date" formControlName="birthdate" id="birthdate">
             <ng-template [ngIf]="student.controls['birthdate'].invalid && student.controls['birthdate'].touched">
                 <app-message [type]="'warning'" [message]="'Введіть дату народження'" [classes]="'mb10 alert'">
@@ -77,7 +77,7 @@
                 <app-preloader></app-preloader>
             </div>
             <ng-template #studentAddForm>
-                <button [disabled]="!student.valid" class="add border border-radius p10" type="submit">Оновити</button>
+                <button [disabled]="!student.valid" class="add border border-radius p10" type="submit">Додати</button>
             </ng-template>
         </form>
     </div>

@@ -15,9 +15,6 @@ export class DepartmentService {
   getDepartments(): Observable<IDepartment[]> {
     return this.http.get('department/get/list')
     .pipe( map( d => (d as IResponse).result ))
-  // getDepartments(): Observable<any> {
-  //   return this.http.get('departments')
-  //     .pipe( map( d => d ))
   }
 
   getDepartment(id:number): Observable<any> {

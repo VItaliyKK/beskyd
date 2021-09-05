@@ -12,11 +12,11 @@
 		</div>
 		<ng-template #groups>
 			<div class="content p20">
-				<div *ngFor="let dep of (groups$ | async); let i=index; " class="border border-radius p10 mb10">
+				<div *ngFor="let dep of (groups$ | async); let i=index; " class="hover border border-radius p10 mb10">
 					<div class="group">
 						<a [routerLink]="[ '/group', dep.id ]">{{ dep.abbr | uppercase }} (
 							<b>{{ dep.form_education | uppercase }}</b>) 
-							<p>{{ dep.name | uppercase }}</p>
+							<p><em>Кафедра:</em> {{ dep.name | uppercase }}</p>
 						</a>
 						<span>{{ dep.max_quantity_members | date: 'dd.LL.yyyy р.' }}</span>
 						<div class="edit_options_box">
@@ -157,28 +157,22 @@
 			</div>
 
 			<label>Форма навчання:
-				<select formControlName="form_education" [ngModel]="groupForm.value.form_education"
-					[ngClass]="{'warn': groupForm.controls['form_education'].invalid && groupForm.controls['form_education'].touched}">
+				<select formControlName="form_education" [ngModel]="groupForm.value.form_education">
 					<option value="Денна">Денна</option>
 					<option value="Заочна">Заочна</option>
 				</select>
 			</label>
-			<div *ngIf="groupForm.controls['form_education'].invalid && groupForm.controls['form_education'].touched" class="alert">
-				<app-message 
-					[type]="'warning'" 
-					[message]="'Виберіть форму навчання'" 
-					[classes]="'mb10'"></app-message>
-			</div>
+			<ng-template [ngIf]="groupForm.controls['form_education'].invalid && groupForm.controls['form_education'].touched" class="alert">
+				<app-message [type]="'warning'" [message]="'Виберіть форму навчання'" [classes]="'mb10'"></app-message>
+			</ng-template>
 			
 			<label>Максимальна кількість студентів:
 				<input type="number" formControlName="max_quantity_members" max="30" min="1" 
 					[ngClass]="{'warn': groupForm.controls['max_quantity_members'].invalid && groupForm.controls['max_quantity_members'].touched}">
 			</label>
-			<div *ngIf="groupForm.controls['max_quantity_members'].invalid && groupForm.controls['max_quantity_members'].touched" class="alert">
-				<app-message 
-					[type]="'warning'" 
-					[message]="'Виберіть максимальну кількість студентів'"></app-message>
-			</div>
+			<ng-template [ngIf]="groupForm.controls['max_quantity_members'].invalid && groupForm.controls['max_quantity_members'].touched" class="alert">
+				<app-message [type]="'warning'" [message]="'Виберіть максимальну кількість студентів'"></app-message>
+			</ng-template>
 			
 			<div *ngIf="preloaders.createGroup; else addGroupPreloader">
 				<button type="button">

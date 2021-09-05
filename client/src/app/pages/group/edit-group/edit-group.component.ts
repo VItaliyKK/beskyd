@@ -55,6 +55,12 @@ export class EditGroupComponent implements OnInit {
           department_id: group.department_id
         })
         this.preloaders.preloader = false
+      }).catch( err => {
+        if(err.status === 404){
+          this.router.navigateByUrl(`/not-found`)
+        }else{
+          this.errorMessage = err.message
+        }
       })
   }
 
