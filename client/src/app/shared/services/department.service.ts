@@ -12,31 +12,31 @@ export class DepartmentService {
 
   constructor( private http: HttpClient ) { }
 
-  // getDepartments(): Observable<IDepartment[]> {
-    // return this.http.get('department/get/list')
-    // .pipe( map( d => (d as IResponse).result ))
-  getDepartments(): Observable<any> {
-    return this.http.get('departments')
-      .pipe( map( d => d ))
+  getDepartments(): Observable<IDepartment[]> {
+    return this.http.get('department/get/list')
+    .pipe( map( d => (d as IResponse).result ))
+  // getDepartments(): Observable<any> {
+  //   return this.http.get('departments')
+  //     .pipe( map( d => d ))
   }
 
   getDepartment(id:number): Observable<any> {
-    return this.http.get(`departments/${id}`)
-      .pipe( map( d => d ))
+    return this.http.get(`department/${id}`)
+      .pipe( map( d => (d as IResponse).result ))
   }
 
   createDepartment({name, abbr, founded}:IDepartment): Promise<any> {
-    return this.http.post<IDepartment>('departments/add', { name, abbr, founded })
+    return this.http.post<IDepartment>('department/add', { name, abbr, founded })
       .toPromise();
   }
 
   deleteDepartment(id:number): Promise<any> {
-    return this.http.delete<string>(`departments/${id}`)
+    return this.http.delete<string>(`department/${id}`)
       .toPromise();
   }
 
   updateDepartment({id, name, abbr, founded}:IDepartment): Promise<any> {
-    return this.http.put<IDepartment>(`departments/${id}`, { name, abbr, founded })
+    return this.http.put<IDepartment>(`department/${id}`, { name, abbr, founded })
       .toPromise();
   }
 }

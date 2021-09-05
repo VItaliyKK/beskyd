@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IDepartment } from 'src/app/shared/interfaces/department.interface';
 import { DepartmentService } from 'src/app/shared/services/department.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-edit-department',
@@ -36,10 +37,11 @@ export class EditDepartmentComponent implements OnInit {
     this.department$ = this.departmentService.getDepartment(this.id).toPromise()
     this.department$.then( dep => {
         this.department = dep
+        const date = moment(dep.founded).format("YYYY-MM-DD");
         this.departmentForm.setValue({
           name: dep.name,
           abbr: dep.abbr,
-          founded: dep.founded
+          founded: date
         })
         this.preloader = false
       })

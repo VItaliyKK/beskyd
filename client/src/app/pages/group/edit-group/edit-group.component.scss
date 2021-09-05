@@ -1,0 +1,23 @@
+.edit_form {
+    background-color: var(--light-color);
+    label{
+        display: grid;
+        grid-auto-rows: 40px;
+        align-items: center;
+        margin-bottom: 10px;
+        input, select, button{
+            border: 1px solid var(--middle-color);
+            border-radius: var(--border-radius);
+            height: 100%;
+            padding: 0 10px;
+            &.warn{
+                border-color: red;
+            }
+        }
+    }
+    button[type="submit"]{
+        width: 100%;
+        color: var(--update-color);
+        height:40px;
+    }
+}

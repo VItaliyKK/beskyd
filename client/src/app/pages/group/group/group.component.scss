@@ -1,0 +1,9 @@
+.group{
+    display: grid;
+    gap: 10px;
+    background-color: var(--light-color);
+    .group_section{
+        display: grid;
+        gap: 5px;
+    }
+}

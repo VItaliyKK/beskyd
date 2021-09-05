@@ -1,1 +1,96 @@
-<p>edit-group works!</p>
+<a [routerLink]="[ '/group/list' ]" class="breadcrumb mb20">Групи</a>
+
+<div class="wrapper border border-radius mb20">
+	<header class="p20">
+		<h2>Редагувати:</h2>
+		<div>
+            <button class="delete ml20" [disabled]="preloaders.preloader" (click)="deleteGroup()">видалити</button>
+        </div>
+	</header>
+
+    <div *ngIf="!errorMessage; else displayError">
+        <div *ngIf="preloaders.preloader; else groupEdit" class="p20">
+            <app-preloader></app-preloader>
+        </div>
+        <ng-template #groupEdit>
+            <form [formGroup]="groupForm" (ngSubmit)="updateGroup()" class="edit_form p20">
+
+				<label>Абревіатура:
+					<input type="text" formControlName="abbr"
+						[ngClass]="{'warn': groupForm.controls['abbr'].invalid && groupForm.controls['abbr'].touched}">
+				</label>
+				<div *ngIf="groupForm.controls['abbr'].invalid && groupForm.controls['abbr'].touched" class="alert">
+					<div *ngIf="groupForm.controls['abbr'].errors.maxlength">
+						<app-message [type]="'warning'" [message]="'Максимальна кількість символів: 6'"
+							[classes]="'mb10'"></app-message>
+					</div>	
+					<div *ngIf="groupForm.controls['abbr'].errors.required">
+						<app-message [type]="'warning'" [message]="'Введіть абревіатуру'"
+							[classes]="'mb10'"></app-message>
+					</div>
+				</div>
+
+				<label>Кафедра:
+					<select formControlName="department_id" [ngModel]="groupForm.value.department_id"
+						[ngClass]="{'warn': groupForm.controls['department_id'].invalid && groupForm.controls['department_id'].touched}">
+						<option *ngFor="let dep of departments;" [value]="dep.id">{{ dep.name }}</option>
+					</select>
+				</label>
+				<div *ngIf="groupForm.controls['department_id'].invalid && groupForm.controls['department_id'].touched" class="alert">
+					<app-message 
+						[type]="'warning'" 
+						[message]="'Виберіть кафедру'" 
+						[classes]="'mb10'"></app-message>
+				</div>
+
+				<label>Форма навчання:
+					<select formControlName="form_education" [ngModel]="groupForm.value.form_education"
+						[ngClass]="{'warn': groupForm.controls['form_education'].invalid && groupForm.controls['form_education'].touched}">
+						<option value="Денна">Денна</option>
+						<option value="Заочна">Заочна</option>
+					</select>
+				</label>
+				<div *ngIf="groupForm.controls['form_education'].invalid && groupForm.controls['form_education'].touched" class="alert">
+					<app-message 
+						[type]="'warning'" 
+						[message]="'Виберіть форму навчання'" 
+						[classes]="'mb10'"></app-message>
+				</div>
+				
+				<label>Максимальна кількість студентів:
+					<input type="number" formControlName="max_quantity_members" max="30" min="1" 
+						[ngClass]="{'warn': groupForm.controls['max_quantity_members'].invalid && groupForm.controls['max_quantity_members'].touched}">
+				</label>
+				<div *ngIf="groupForm.controls['max_quantity_members'].invalid && groupForm.controls['max_quantity_members'].touched" class="alert">
+					<div *ngIf="groupForm.controls['max_quantity_members'].errors.min || groupForm.controls['max_quantity_members'].errors.max">
+						<app-message [type]="'warning'" 
+						[message]="'Доступна кількість студентів: 1 - 30'"></app-message>
+					</div>
+					<div *ngIf="groupForm.controls['max_quantity_members'].errors.min || groupForm.controls['max_quantity_members'].errors.required">
+						<app-message [type]="'warning'" 
+						[message]="'Вкажіть максимальну кількість студентів'"></app-message>
+					</div>
+					
+				</div>
+				
+				<div *ngIf="preloaders.update; else addGroupPreloader">
+					<button type="button">
+						<app-preloader></app-preloader>
+					</button>
+				</div>
+				<ng-template #addGroupPreloader>
+					<button [disabled]="!groupForm.valid" class="add border-radius border" type="submit">Оновити</button>
+					<div *ngIf="groupForm.errors?.unresolved" class="alert">
+						<app-message 
+							[type]="'warning'" 
+							[message]="groupForm.errors.unresolved"></app-message>
+					</div>
+				</ng-template>
+			</form>
+        </ng-template>
+    </div>
+
+    <ng-template #displayError>
+		<app-message [type]="'warning'" [message]="errorMessage" [classes]="'m20'"></app-message>
+	</ng-template>
+</div>

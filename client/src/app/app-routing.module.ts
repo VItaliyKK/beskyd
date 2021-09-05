@@ -7,6 +7,7 @@ import { DepartmentsComponent } from './pages/department/departments/departments
 import { DepartmentComponent } from './pages/department/department/department.component';
 import { EditDepartmentComponent } from './pages/department/edit-department/edit-department.component';
 import { GroupsComponent } from './pages/group/groups/groups.component';
+import { GroupComponent } from './pages/group/group/group.component';
 import { EditGroupComponent } from './pages/group/edit-group/edit-group.component';
 
 
@@ -16,7 +17,7 @@ const routes: Routes = [
   { path: 'department/:id', component: DepartmentComponent },
   { path: 'group/list', component: GroupsComponent },
   { path: 'group/edit/:id', component: EditGroupComponent },
-  { path: 'group/:id', component: GroupsComponent },
+  { path: 'group/:id', component: GroupComponent },
   { path: '', component: HomeComponent},
   { path: '**', component: NotFoundComponent}
 ];

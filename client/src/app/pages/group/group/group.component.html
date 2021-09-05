@@ -1,1 +1,37 @@
-<p>group works!</p>
+<a [routerLink]="[ '/group/list' ]" class="breadcrumb mb20">Групи</a>
+
+<div class="wrapper border border-radius">
+	<header class="p20">
+		<h2>Група: <b>{{ group?.abbr | uppercase }}</b></h2>
+		<div>
+            <button [disabled]="preloader">
+				<a [routerLink]="[ '/group/edit', id ]" class="edit">змінити</a>
+			</button>
+            <button class="delete ml20" [disabled]="preloader" (click)="deleteGroup()">видалити</button>
+        </div>
+	</header>
+	
+	<div *ngIf="preloader; else groupInfo" class="p20">
+		<app-preloader></app-preloader>
+	</div>
+	<ng-template #groupInfo>
+		<div class="group p20">
+			<div class="group_section border border-radius p10">
+				<b>Абревіатура:</b>
+				<p>{{ group?.abbr | uppercase }}</p>
+			</div>
+            <div class="group_section border border-radius p10">
+				<b>Форма навчання:</b>
+				<p>{{ group?.form_education }}</p>
+			</div>
+			<div class="group_section border border-radius p10">
+				<b>Кафедра:</b>
+				<p>{{ group?.name | uppercase }}</p>
+			</div>
+			<div class="group_section border border-radius p10">
+				<b>Максимальна кількість студентів:</b>
+				<p>{{ group?.max_quantity_members }}</p>
+			</div>
+		</div>
+	</ng-template>
+</div>
